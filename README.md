@@ -40,7 +40,7 @@ npm i -D @types/elm
 npm i -D vite-plugin-elm
 ```
 2. Place the Elm project, including the `elm.json` file, in the library directory, e.g., `/src/lib` in SvelteKit."
-3. Modify `vite.config.ts:
+3. Modify `vite.config.ts`:
 ```ts
 // vite.config.ts
 
@@ -67,4 +67,20 @@ export default defineConfig({
 </script>
 
 <div bind:this={elmRoot} />
+```
+
+## Running Examples
+1. Go to folder:
+```shell
+cd method1 # or method2
+```
+
+2. Install npm packages:
+```shell
+npm i
+```
+
+3. Run dev server:
+```shell
+npm run dev
 ```
