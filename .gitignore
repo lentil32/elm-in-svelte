@@ -15,3 +15,5 @@ pnpm-lock.yaml
 elm-stuff
 # elm-repl generated files
 repl-temp-*
+
+method1_deepdive/static/elm
