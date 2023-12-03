@@ -9,11 +9,10 @@ package
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# npm users don't want it
-pnpm-lock.yaml
 # elm-package generated files
 elm-stuff
 # elm-repl generated files
 repl-temp-*
 
+method1/static/elm.js
 method1_deepdive/static/elm

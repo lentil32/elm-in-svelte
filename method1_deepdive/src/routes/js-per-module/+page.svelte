@@ -1,30 +1,28 @@
 <script lang="ts">
-	import Elm from "$lib/elm/Elm.svelte";
+  import Elm from "$lib/elm/Elm.svelte";
 
-	const elmJsFilenames = ["Hello", "Bye", "Welcome"] as const;
+  const elmJsFilenames = ["Hello", "Bye", "Welcome"] as const;
 </script>
 
-<h2>
-	Example 2. Using multiple `<moduleName
-		>.js` files containing a module as same name as filename.
-	</moduleName>
-</h2>
-
 <section>
-	<div class="elm-container">
-		{#each elmJsFilenames as elmJsFilename, index (`${elmJsFilename}-${index}`)}
-			<Elm {elmJsFilename} />
-		{/each}
-		{#each elmJsFilenames as elmJsFilename, index}
-			{#key `${elmJsFilename}-${index * 3}`}
-				<Elm {elmJsFilename} />
-			{/key}
-			{#key `${elmJsFilename}-${index * 3 + 1}`}
-				<Elm {elmJsFilename} />
-			{/key}
-			{#key `${elmJsFilename}-${index * 3 + 2}`}
-				<Elm {elmJsFilename} />
-			{/key}
-		{/each}
-	</div>
+  <h2>
+    Example 2. Using multiple `moduleName.js` files containing a module as same
+    name as filename.
+  </h2>
+  <div class="elm-container">
+    {#each elmJsFilenames as elmJsFilename, index (`${elmJsFilename}-${index}`)}
+      <Elm {elmJsFilename} />
+    {/each}
+    {#each elmJsFilenames as elmJsFilename, index}
+      {#key `${elmJsFilename}-${index * 3}`}
+        <Elm {elmJsFilename} />
+      {/key}
+      {#key `${elmJsFilename}-${index * 3 + 1}`}
+        <Elm {elmJsFilename} />
+      {/key}
+      {#key `${elmJsFilename}-${index * 3 + 2}`}
+        <Elm {elmJsFilename} />
+      {/key}
+    {/each}
+  </div>
 </section>

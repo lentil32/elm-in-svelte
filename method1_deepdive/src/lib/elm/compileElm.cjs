@@ -25,13 +25,21 @@ fs.readdir(srcDirectory, (err, files) => {
         file.replace(".elm", ".js"),
       );
       exec(
-        `elm make ${filePath} --output=${path.relative(process.cwd(), outputFilePath)} --optimize`,
+        `elm make ${filePath} --output=${path.relative(
+          process.cwd(),
+          outputFilePath,
+        )} --optimize`,
         (error, stdout, stderr) => {
           if (error) {
             console.error(`Error executing elm make for ${file}:`, error);
             return;
           }
-          console.log(`Compiled ${file} to ${path.relative(projectRootDirectory, outputFilePath)}`);
+          console.log(
+            `Compiled ${file} to ${path.relative(
+              projectRootDirectory,
+              outputFilePath,
+            )}`,
+          );
           console.log(stdout);
         },
       );
