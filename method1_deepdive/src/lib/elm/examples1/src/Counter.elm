@@ -2,6 +2,7 @@ module Counter exposing (Msg(..), main, update, view)
 
 import Browser
 import Html exposing (Html, button, div, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
 
@@ -28,8 +29,9 @@ update msg model =
 
 
 view model =
-    div []
-        [ button [ onClick Increment ] [ text "+" ]
+    div [ class "grid" ]
+        [ button [ onClick Decrement ] [ text "-" ]
         , div [] [ text (String.fromInt model) ]
-        , button [ onClick Reset ] [ text "Reset" ]
+        , button [ onClick Increment ] [ text "+" ]
+        , button [ class "secondary", onClick Reset ] [ text "Reset" ]
         ]

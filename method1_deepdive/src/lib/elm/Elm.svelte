@@ -1,16 +1,13 @@
 <script context="module" lang="ts">
-  import { writable, get } from "svelte/store";
-
   declare let Elm: ElmInstance;
 
   type Callback = () => void;
 
-  const scriptsLoaded = writable(new Set<string>());
+  const scriptsLoaded = new Set<string>();
   const loadingPromises: Record<string, Promise<void>> = {};
 
   const loadScript = (src: string, callback: Callback): void => {
-    const loadedScripts = get(scriptsLoaded);
-    if (loadedScripts.has(src)) {
+    if (scriptsLoaded.has(src)) {
       callback();
       return;
     }
@@ -22,7 +19,7 @@
         script.async = true;
 
         script.onload = () => {
-          scriptsLoaded.update((s) => s.add(src));
+          scriptsLoaded.add(src);
           resolve();
         };
 
@@ -43,11 +40,12 @@
 
 <script lang="ts">
   import { onMount } from "svelte";
+  import { assets } from "$app/paths";
 
   export let elmJsFilename: string;
   export let moduleName: string = elmJsFilename;
 
-  const elmAssetsDirectory: string = "/elm";
+  const elmAssetsDirectory: string = `${assets}/elm`;
   const elmJsPath: string = `${elmAssetsDirectory}/${elmJsFilename}.js`;
 
   let elmRoot: Node;

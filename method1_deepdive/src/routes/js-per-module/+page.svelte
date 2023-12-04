@@ -4,25 +4,17 @@
   const elmJsFilenames = ["Hello", "Bye", "Welcome"] as const;
 </script>
 
-<section>
+<hgroup>
   <h2>
     Example 2. Using multiple `moduleName.js` files containing a module as same
     name as filename.
   </h2>
-  <div class="elm-container">
-    {#each elmJsFilenames as elmJsFilename, index (`${elmJsFilename}-${index}`)}
+  <h3>Modules are used 3 times each.</h3>
+</hgroup>
+<div>
+  {#each elmJsFilenames as elmJsFilename}
+    {#each Array(3) as _, index (`${elmJsFilename}-${index * 3}`)}
       <Elm {elmJsFilename} />
     {/each}
-    {#each elmJsFilenames as elmJsFilename, index}
-      {#key `${elmJsFilename}-${index * 3}`}
-        <Elm {elmJsFilename} />
-      {/key}
-      {#key `${elmJsFilename}-${index * 3 + 1}`}
-        <Elm {elmJsFilename} />
-      {/key}
-      {#key `${elmJsFilename}-${index * 3 + 2}`}
-        <Elm {elmJsFilename} />
-      {/key}
-    {/each}
-  </div>
-</section>
+  {/each}
+</div>

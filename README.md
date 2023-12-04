@@ -4,7 +4,7 @@
 
 1. Install `@types/elm`:
 
-```shell
+```sh
 npm i -D @types/elm
 ```
 
@@ -12,7 +12,7 @@ npm i -D @types/elm
 3. Place `sample.js` in the assets directory, e.g., `/static/elm` for SvelteKit.
 4. Modify `+page.svelte` to embed `elm.js`:
 
-```html
+```svelte
 <script context="module" lang="ts">
   declare let Elm: ElmInstance;
 </script>
@@ -32,13 +32,14 @@ npm i -D @types/elm
   <script src="/elm/sample.js"></script>
 </svelte:head>
 <div bind:this="{elmRoot}" />
+
 ```
 
 ## Method 2. Using [vite-plugin-elm](https://github.com/hmsk/vite-plugin-elm):
 
 1. Install `vite-plugin-elm`:
 
-```shell
+```sh
 npm i -D vite-plugin-elm
 ```
 
@@ -56,11 +57,12 @@ import { plugin as elm } from "vite-plugin-elm";
 export default defineConfig({
   plugins: [sveltekit(), elm()],
 });
+
 ```
 
 4. Modify `+page.svelte` to embed `Main.elm`:
 
-```html
+```svelte
 <script lang="ts">
   import { onMount } from "svelte";
   import { Elm } from "$lib/elm/src/Main.elm";
@@ -74,6 +76,7 @@ export default defineConfig({
 </script>
 
 <div bind:this="{elmRoot}" />
+
 ```
 
 ## Method 1 deep-dive. Embedding multiple Elm modules with script lifecycle management
@@ -86,7 +89,7 @@ export default defineConfig({
 
 File `Elm.svelte`:
 
-```html
+```svelte
 <script context="module" lang="ts">
   import { writable, get } from "svelte/store";
 
@@ -132,11 +135,12 @@ File `Elm.svelte`:
 
 <script lang="ts">
   import { onMount } from "svelte";
+  import { assets } from "$app/paths";
 
   export let elmJsFilename: string;
   export let moduleName: string = elmJsFilename;
 
-  const elmAssetsDirectory: string = "/elm";
+  const elmAssetsDirectory: string = `${assets}/elm`;
   const elmJsPath: string = `${elmAssetsDirectory}/${elmJsFilename}.js`;
 
   let elmRoot: Node;
@@ -153,64 +157,44 @@ File `Elm.svelte`:
   });
 </script>
 
-<div bind:this="{elmRoot}" />
+<div bind:this={elmRoot} />
+
 ```
 
-File `compileElm.cjs`:
+File `elm-build.sh`:
 
-```ts
-const fs = require("fs");
-const { exec } = require("child_process");
-const path = require("path");
+```sh
+#!/bin/sh
 
-const projectRootDirectory = process.cwd();
+project_root=$(pwd)
+elm_root=$project_root/src/lib/elm
 
-const elmDirectory = path.join(projectRootDirectory, "src/lib/elm");
-const srcDirectory = path.join(elmDirectory, "src");
-const outputDirectory = path.join(projectRootDirectory, "static/elm");
+build_example1() {
+	cd $elm_root/examples1
+	elm make src/* --output=$project_root/static/elm/elm.js --optimize
+}
 
-process.chdir(elmDirectory);
+build_example2() {
+	cd $elm_root/examples2
 
-fs.readdir(srcDirectory, (err, files) => {
-  if (err) {
-    console.error("Error reading directory:", err);
-    return;
-  }
+	for elm_file in src/*.elm; do
+		base_name=$(basename "$elm_file" .elm)
+		js_out_path="${project_root}/static/elm/${base_name}.js"
+		elm make "$elm_file" --output="$js_out_path" --optimize
+	done
+}
 
-  files
-    .filter((file) => file.endsWith(".elm"))
-    .forEach((file) => {
-      const filePath = path.join(srcDirectory, file);
-      const outputFilePath = path.join(
-        outputDirectory,
-        file.replace(".elm", ".js"),
-      );
-      exec(
-        `elm make ${filePath} --output=${path.relative(
-          process.cwd(),
-          outputFilePath,
-        )} --optimize`,
-        (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error executing elm make for ${file}:`, error);
-            return;
-          }
-          console.log(
-            `Compiled ${file} to ${path.relative(
-              projectRootDirectory,
-              outputFilePath,
-            )}`,
-          );
-          console.log(stdout);
-        },
-      );
-    });
-});
+if [ "$1" = "1" ]; then
+	build_example1
+elif [ "$1" = "2" ]; then
+	build_example2
+fi
+
 ```
 
 ### Example 1. Using one `elm.js` file containing multiple modules
 
-```html
+```svelte
 <script lang="ts">
   import Elm from "$lib/elm/Elm.svelte";
 
@@ -218,61 +202,54 @@ fs.readdir(srcDirectory, (err, files) => {
   const moduleNames = ["Counter", "TextField"] as const;
 </script>
 
-<section>
+<hgroup>
   <h2>Example 1. Using one `elm.js` file containing multiple modules</h2>
-  <div class="elm-container">
-    {#each moduleNames as moduleName, index
-    (`${elmJsFilename}-${moduleName}-${index}`)}
-    <Elm {elmJsFilename} {moduleName} />
-    {/each} {#each moduleNames as moduleName, index} {#key
-    `${moduleName}-${index * 3}`}
-    <Elm {elmJsFilename} {moduleName} />
-    {/key} {#key `${moduleName}-${index * 3 + 1}`}
-    <Elm {elmJsFilename} {moduleName} />
-    {/key} {#key `${moduleName}-${index * 3 + 2}`}
-    <Elm {elmJsFilename} {moduleName} />
-    {/key} {/each}
-  </div>
-</section>
+  <h3>Each modules are used 3 times</h3>
+</hgroup>
+<div>
+  {#each moduleNames as moduleName}
+    {#each Array(3) as _, index (`${moduleName}-${index * 3}`)}
+      <div>
+        <Elm {elmJsFilename} {moduleName} />
+      </div>
+    {/each}
+  {/each}
+</div>
+
 ```
 
 ## Example 2. Using multiple `_moduleName_.js` files containing a module as same name as filename.
 
-```html
+```svelte
 <script lang="ts">
   import Elm from "$lib/elm/Elm.svelte";
 
   const elmJsFilenames = ["Hello", "Bye", "Welcome"] as const;
 </script>
 
-<section>
+<hgroup>
   <h2>
     Example 2. Using multiple `moduleName.js` files containing a module as same
-    name as filename
+    name as filename.
   </h2>
-  <div class="elm-container">
-    {#each elmJsFilenames as elmJsFilename, index (`${elmJsFilename}-${index}`)}
+  <h3>Each modules are used 3 times</h3>
+</hgroup>
+<div>
+  {#each elmJsFilenames as elmJsFilename}
+    {#each Array(3) as _, index (`${elmJsFilename}-${index * 3}`)}
       <Elm {elmJsFilename} />
     {/each}
-    {#each elmJsFilenames as elmJsFilename, index}
-      {#key `${elmJsFilename}-${index * 3}`}
-        <Elm {elmJsFilename} />
-      {/key}
-      {#key `${elmJsFilename}-${index * 3 + 1}`}
-        <Elm {elmJsFilename} />
-      {/key}
-      {#key `${elmJsFilename}-${index * 3 + 2}`}
-        <Elm {elmJsFilename} />
-      {/key}
-    {/each}
-  </div>
-</section>
+  {/each}
+</div>
+
 ```
 
 ## See also
+
 - [joakin/elm-node: Run Elm + JS programs easily in node](https://github.com/joakin/elm-node)
 
 ## Reference
+
 - [JavaScript Interop · An Introduction to Elm](https://guide.elm-lang.org/interop/)
 - [example of multiple elm apps on a single page](https://gist.github.com/epequeno/2d12d021bd865582b0fcb1509373ba25)
 
@@ -282,19 +259,19 @@ fs.readdir(srcDirectory, (err, files) => {
 
 1. Go to `method(1|2)` directory:
 
-```shell
+```sh
 cd method1 # or method2
 ```
 
 2. Install npm packages:
 
-```shell
+```sh
 npm i
 ```
 
 3. (Only for Method 1) Compile `.elm` into `.js`:
 
-```shell
+```sh
 # The command is equivalent to
 # `cd ./src/lib/elm/elm-sample \
 # && elm make src/Main.elm --output=../../../../static/elm.js`.
@@ -305,7 +282,7 @@ npm run elm:build
 
 4. Run dev server:
 
-```shell
+```sh
 npm run dev
 ```
 
@@ -313,25 +290,26 @@ npm run dev
 
 1. Go to `method1_deepdive` directory:
 
-```shell
+```sh
 cd method1_deepdive
 ```
 
 2. Install npm packages:
 
-```shell
+```sh
 npm i
 ```
 
 3. Compile `.elm` into `.js`:
 
-```shell
-npm run elm:build:examples1
-npm run elm:build:examples2
+```sh
+npm run elm:build
+# Equivalent to `npm run elm:build:examples1`
+# && npm run elm:build:examples2`
 ```
 
 4. Run dev server:
 
-```shell
+```sh
 npm run dev
 ```
