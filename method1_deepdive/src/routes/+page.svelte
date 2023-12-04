@@ -2,16 +2,16 @@
   import { base } from "$app/paths";
 </script>
 
-<h2>Elm Integration Examples</h2>
+<h3>Elm Integration Examples</h3>
 <ul>
   <li>
     <a href="{base}/one-elm-js">
-      Example 1: Single 'elm.js' File with Multiple Modules
+      Example 1: Single 'elm.js' file with multiple modules
     </a>
   </li>
   <li>
     <a href="{base}/js-per-module">
-      Example 2: Multiple '.js' Files, Each Containing a Separate Module
+      Example 2: Multiple '.js' files, each containing a separate module
     </a>
   </li>
 </ul>

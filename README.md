@@ -91,18 +91,15 @@ File `Elm.svelte`:
 
 ```svelte
 <script context="module" lang="ts">
-  import { writable, get } from "svelte/store";
-
   declare let Elm: ElmInstance;
 
   type Callback = () => void;
 
-  const scriptsLoaded = writable(new Set<string>());
+  const scriptsLoaded = new Set<string>();
   const loadingPromises: Record<string, Promise<void>> = {};
 
   const loadScript = (src: string, callback: Callback): void => {
-    const loadedScripts = get(scriptsLoaded);
-    if (loadedScripts.has(src)) {
+    if (scriptsLoaded.has(src)) {
       callback();
       return;
     }
@@ -114,7 +111,7 @@ File `Elm.svelte`:
         script.async = true;
 
         script.onload = () => {
-          scriptsLoaded.update((s) => s.add(src));
+          scriptsLoaded.add(src);
           resolve();
         };
 
@@ -203,8 +200,8 @@ fi
 </script>
 
 <hgroup>
-  <h2>Example 1. Using one `elm.js` file containing multiple modules</h2>
-  <h3>Each modules are used 3 times</h3>
+  <h2>Using one `elm.js` file containing multiple modules</h2>
+  <h3>Each module is used 3 times.</h3>
 </hgroup>
 <div>
   {#each moduleNames as moduleName}
@@ -228,11 +225,10 @@ fi
 </script>
 
 <hgroup>
-  <h2>
-    Example 2. Using multiple `moduleName.js` files containing a module as same
-    name as filename.
-  </h2>
-  <h3>Each modules are used 3 times</h3>
+  <h2>Using multiple `moduleName.js` files</h2>
+  <h3>
+    Each module is used 3 times.
+  </h3>
 </hgroup>
 <div>
   {#each elmJsFilenames as elmJsFilename}
