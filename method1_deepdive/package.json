@@ -4,17 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "vite dev --port 8943",
-    "build": "vite build",
+    "build": "sh elm-build.sh 1 && sh elm-build.sh 2 && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "elm:clean": "rm -rf ./static/elm",
-    "elm:build:examples1": "cd ./src/lib/elm/examples1 && elm make src/Counter.elm src/TextField.elm --output=../../../../static/elm/elm.js --optimize",
-    "elm:build:examples2": "node ./src/lib/elm/compileElm.cjs"
+    "elm:build": "sh elm-build.sh 1 && sh elm-build.sh 2",
+    "elm:build:examples1": "sh elm-build.sh 1",
+    "elm:build:examples2": "sh elm-build.sh 2"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^2.0.0",
+    "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.27.4",
+    "@picocss/pico": "^1.5.10",
     "@types/elm": "^0.19.3",
     "svelte": "^4.2.7",
     "svelte-check": "^3.6.0",
@@ -22,5 +24,6 @@
     "typescript": "^5.0.0",
     "vite": "^4.4.2"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {}
 }

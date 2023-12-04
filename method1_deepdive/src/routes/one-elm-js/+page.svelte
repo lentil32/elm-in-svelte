@@ -5,22 +5,16 @@
   const moduleNames = ["Counter", "TextField"] as const;
 </script>
 
-<section>
+<hgroup>
   <h2>Example 1. Using one `elm.js` file containing multiple modules</h2>
-  <div class="elm-container">
-    {#each moduleNames as moduleName, index (`${elmJsFilename}-${moduleName}-${index}`)}
-      <Elm {elmJsFilename} {moduleName} />
+  <h3>Modules are used 3 times each.</h3>
+</hgroup>
+<div>
+  {#each moduleNames as moduleName}
+    {#each Array(3) as _, index (`${moduleName}-${index * 3}`)}
+      <div>
+        <Elm {elmJsFilename} {moduleName} />
+      </div>
     {/each}
-    {#each moduleNames as moduleName, index}
-      {#key `${moduleName}-${index * 3}`}
-        <Elm {elmJsFilename} {moduleName} />
-      {/key}
-      {#key `${moduleName}-${index * 3 + 1}`}
-        <Elm {elmJsFilename} {moduleName} />
-      {/key}
-      {#key `${moduleName}-${index * 3 + 2}`}
-        <Elm {elmJsFilename} {moduleName} />
-      {/key}
-    {/each}
-  </div>
-</section>
+  {/each}
+</div>
