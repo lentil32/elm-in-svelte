@@ -6,8 +6,8 @@
 </script>
 
 <hgroup>
-  <h2>Example 1. Using one `elm.js` file containing multiple modules</h2>
-  <h3>Modules are used 3 times each.</h3>
+  <h2>Using one `elm.js` file containing multiple modules</h2>
+  <h3>Each module is used 3 times.</h3>
 </hgroup>
 <div>
   {#each moduleNames as moduleName}

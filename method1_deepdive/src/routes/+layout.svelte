@@ -24,40 +24,48 @@
   ];
 </script>
 
-<nav class="container">
-  <ul>
-    <li>How to Embed Elm into Svelte with TypeScript Setup</li>
-  </ul>
-  <ul>
-    <li>
-      <a href="https://github.com/lenntil/elm-in-svelte"
-        ><strong>GitHub</strong></a
-      >
-    </li>
-  </ul>
-</nav>
+<svelte:head>
+  <title>How to Embed Elm into Svelte with TypeScript Setup</title>
+</svelte:head>
 
-<nav class="container">
-  <ul>
-    {#each menus as menu (menu)}
+<header class="container">
+  <hgroup>
+    <h1>Elm in Svelte</h1>
+    <h2>How to Embed Elm into Svelte with TypeScript Setup</h2>
+  </hgroup>
+
+  <nav>
+    <ul>
+      {#each menus as menu (menu)}
+        <li>
+          <a
+            href={menu.url}
+            class:primary={$page.url.pathname !== menu.url}
+            class:secondary={$page.url.pathname === menu.url}
+          >
+            {#if $page.url.pathname === menu.url}
+              <u>
+                {menu.title}
+              </u>
+            {:else}
+              {menu.title}
+            {/if}
+          </a>
+        </li>
+      {/each}
+    </ul>
+    <ul>
       <li>
         <a
-          href={menu.url}
-          class:primary={$page.url.pathname !== menu.url}
-          class:secondary={$page.url.pathname === menu.url}
+          href="https://github.com/lenntil/elm-in-svelte"
+          aria-label="GitHub repository for Elm in Svelte"
         >
-          {#if $page.url.pathname === menu.url}
-            <u>
-              {menu.title}
-            </u>
-          {:else}
-            {menu.title}
-          {/if}
+          <strong>GitHub Repository</strong>
         </a>
       </li>
-    {/each}
-  </ul>
-</nav>
+    </ul>
+  </nav>
+</header>
 
 <main class="container">
   <slot />

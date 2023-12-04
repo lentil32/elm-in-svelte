@@ -5,11 +5,10 @@
 </script>
 
 <hgroup>
-  <h2>
-    Example 2. Using multiple `moduleName.js` files containing a module as same
-    name as filename.
-  </h2>
-  <h3>Modules are used 3 times each.</h3>
+  <h2>Using multiple `moduleName.js` files</h2>
+  <h3>
+    Each module is used 3 times.
+  </h3>
 </hgroup>
 <div>
   {#each elmJsFilenames as elmJsFilename}
