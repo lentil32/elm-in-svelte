@@ -199,11 +199,13 @@ fi
   const moduleNames = ["Counter", "TextField"] as const;
 </script>
 
-<hgroup>
-  <h2>Using one `elm.js` file containing multiple modules</h2>
-  <h3>Each module is used 3 times.</h3>
-</hgroup>
-<div>
+<section>
+  <hgroup>
+    <h4>Using one `elm.js` file containing multiple modules</h4>
+    <h5>Each module is used 3 times.</h5>
+  </hgroup>
+</section>
+<section>
   {#each moduleNames as moduleName}
     {#each Array(3) as _, index (`${moduleName}-${index * 3}`)}
       <div>
@@ -211,11 +213,11 @@ fi
       </div>
     {/each}
   {/each}
-</div>
+</section>
 
 ```
 
-## Example 2. Using multiple `_moduleName_.js` files containing a module as same name as filename.
+### Example 2. Using multiple `_moduleName_.js` files containing a module as same name as filename.
 
 ```svelte
 <script lang="ts">
@@ -225,10 +227,10 @@ fi
 </script>
 
 <hgroup>
-  <h2>Using multiple `moduleName.js` files</h2>
-  <h3>
+  <h4>Using multiple `moduleName.js` files each containing one module</h4>
+  <h5>
     Each module is used 3 times.
-  </h3>
+  </h5>
 </hgroup>
 <div>
   {#each elmJsFilenames as elmJsFilename}
