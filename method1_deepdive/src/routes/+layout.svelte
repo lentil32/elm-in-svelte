@@ -1,7 +1,7 @@
 <script lang="ts">
   import "@picocss/pico";
-  import { base } from "$app/paths";
   import { page } from "$app/stores";
+    import { base } from "$app/paths";
 
   type Menu = {
     url: `/${string}`;
@@ -10,18 +10,19 @@
 
   const menus: Array<Menu> = [
     {
-      url: `${base}/`,
+      url: `/`,
       title: "Home",
     },
     {
-      url: `${base}/one-elm-js`,
+      url: `/one-elm-js`,
       title: "Example 1",
     },
     {
-      url: `${base}/js-per-module`,
+      url: `/js-per-module`,
       title: "Example 2",
     },
   ];
+
 </script>
 
 <svelte:head>
@@ -57,7 +58,7 @@
     <ul>
       <li>
         <a
-          href="https://github.com/lenntil/elm-in-svelte"
+          href={`https://github.com/lenntil/${base}`}
           aria-label="GitHub repository for Elm in Svelte"
         >
           <strong>GitHub Repository</strong>
