@@ -1,22 +1,21 @@
-<script lang="ts">
-  import { base } from "$app/paths";
-</script>
+<section>
+  <h3>Elm Integration Examples</h3>
+  <ul>
+    <li>
+      <a href="one-elm-js">
+        Example 1: Using one `elm.js` file containing multiple modules
+      </a>
+    </li>
+    <li>
+      <a href="js-per-module">
+        Example 2: Using multiple `moduleName.js` files each containing one
+        module
+      </a>
+    </li>
+  </ul>
+</section>
 
-<h3>Elm Integration Examples</h3>
-<ul>
-  <li>
-    <a href="{base}/one-elm-js">
-      Example 1: Single 'elm.js' file with multiple modules
-    </a>
-  </li>
-  <li>
-    <a href="{base}/js-per-module">
-      Example 2: Multiple '.js' files, each containing a separate module
-    </a>
-  </li>
-</ul>
-
-<div>
+<section>
   <h3>Key Considerations</h3>
   <ul>
     <li>1. States are separated for each component.</li>
@@ -26,4 +25,4 @@
       affect performance.
     </li>
   </ul>
-</div>
+</section>
