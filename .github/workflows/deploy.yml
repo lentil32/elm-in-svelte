@@ -37,7 +37,7 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: "/${{ github.event.repository.name }}"
+          PUBLIC_BASE_PATH: "/${{ github.event.repository.name }}"
         run: |
           pnpm build
 

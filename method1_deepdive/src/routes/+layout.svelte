@@ -1,73 +1,135 @@
 <script lang="ts">
   import "@picocss/pico";
   import { page } from "$app/stores";
-    import { base } from "$app/paths";
+  import { base } from "$app/paths";
 
   type Menu = {
-    url: `/${string}`;
+    url: string;
     title: string;
   };
 
   const menus: Array<Menu> = [
     {
-      url: `/`,
+      url: base,
       title: "Home",
     },
     {
-      url: `/one-elm-js`,
+      url: "one-elm-js",
       title: "Example 1",
     },
     {
-      url: `/js-per-module`,
+      url: "js-per-module",
       title: "Example 2",
     },
   ];
 
+  let currentPathFromBase: string;
+
+  $: currentPathFromBase =
+    $page.url.pathname
+      .split(base + "/")
+      .slice(1)
+      .join("/") || base;
 </script>
 
 <svelte:head>
-  <title>How to Embed Elm into Svelte with TypeScript Setup</title>
+  <title>How to Embed Elm into Svelte - Elm in Svelte</title>
+  <meta
+    name="description"
+    content="Learn how to integrate Elm modules in a Svelte application."
+  />
+  <meta
+    name="keywords"
+    content="Svelte, Elm, SvelteKit, TypeScript, Functional Programming, Integration, Web Development"
+  />
 </svelte:head>
 
-<header class="container">
-  <hgroup>
-    <h1>Elm in Svelte</h1>
-    <h2>How to Embed Elm into Svelte with TypeScript Setup</h2>
-  </hgroup>
+<header class="container-fluid">
+  <a
+    href={`https://github.com/lenntil${base}`}
+    aria-label="Visit GitHub Repository"
+    class="github-link"
+  >
+    <strong>{`←  Visit GitHub Repository`}</strong>
+  </a>
 
-  <nav>
-    <ul>
-      {#each menus as menu (menu)}
-        <li>
-          <a
-            href={menu.url}
-            class:primary={$page.url.pathname !== menu.url}
-            class:secondary={$page.url.pathname === menu.url}
-          >
-            {#if $page.url.pathname === menu.url}
-              <u>
-                {menu.title}
-              </u>
-            {:else}
-              {menu.title}
-            {/if}
-          </a>
-        </li>
-      {/each}
-    </ul>
-    <ul>
-      <li>
-        <a
-          href={`https://github.com/lenntil/${base}`}
-          aria-label="GitHub repository for Elm in Svelte"
-        >
-          <strong>GitHub Repository</strong>
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <div class="container">
+    <hgroup>
+        <small class="subtitle"> Elm in Svelte </small>
+      <h2>How to Embed Elm into Svelte</h2>
+      <h3>with TypeScript Setup</h3>
+    </hgroup>
+  </div>
 </header>
+<article>
+  <main class="container">
+    <nav>
+      <ul>
+        {#each menus as menu (menu)}
+          <li>
+            <a
+              href={menu.url}
+              class:primary={currentPathFromBase !== menu.url}
+              class:secondary={currentPathFromBase === menu.url}
+            >
+              {#if currentPathFromBase === menu.url}
+                <u>
+                  {menu.title}
+                </u>
+              {:else}
+                {menu.title}
+              {/if}
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </nav>
 
-<main class="container">
-  <slot />
-</main>
+    <hr />
+    <slot />
+  </main>
+</article>
+
+<footer />
+
+<style>
+  .container {
+    max-width: 800px;
+  }
+
+  .subtitle {
+  text-decoration: underline;
+}
+
+  hgroup {
+    margin-top: 1rem;
+  }
+
+  header {
+    padding: 1rem;
+  }
+
+  nav ul {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  main {
+    padding-bottom: 2rem;
+  }
+
+  article {
+    min-height: calc(100vh - 300px);
+    margin-top: 0rem;
+    padding: 1rem;
+  }
+
+  hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  footer {
+    margin-top: 5rem;
+  }
+</style>
