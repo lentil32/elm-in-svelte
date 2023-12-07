@@ -134,11 +134,11 @@ File `Elm.svelte`:
   import { onMount } from "svelte";
   import { assets } from "$app/paths";
 
-  export let elmJsFilename: string;
-  export let moduleName: string = elmJsFilename;
+  export let elmJsFilename: `${string}.js`;
+  export let moduleName: string;
 
   const elmAssetsDirectory: string = `${assets}/elm`;
-  const elmJsPath: string = `${elmAssetsDirectory}/${elmJsFilename}.js`;
+  const elmJsFilePath: string = `${elmAssetsDirectory}/${elmJsFilename}`;
 
   let elmRoot: Node;
   const handleLoad: Callback = () => {
@@ -150,7 +150,7 @@ File `Elm.svelte`:
   };
 
   onMount(() => {
-    loadScript(elmJsPath, handleLoad);
+    loadScript(elmJsFilePath, handleLoad);
   });
 </script>
 
@@ -158,6 +158,7 @@ File `Elm.svelte`:
 
 ```
 
+### Build and [minify](https://guide.elm-lang.org/optimization/asset_size) `.elm` files
 File `elm-build.sh`:
 
 ```sh
@@ -166,9 +167,24 @@ File `elm-build.sh`:
 project_root=$(pwd)
 elm_root=$project_root/src/lib/elm
 
+build_then_uglify() {
+	local js=$1
+	local min=$2
+	shift 2
+
+	elm make --output="$js" --optimize "$@"
+	uglifyjs "$js" \
+		--compress 'pure_funcs=[F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9],pure_getters,keep_fargs=false,unsafe_comps,unsafe' |
+		uglifyjs --mangle --output "$min"
+	rm $js
+}
+
 build_example1() {
+	local js="$project_root/static/elm/elm.unmin.js"
+	local min="$project_root/static/elm/elm.js"
+
 	cd $elm_root/examples1
-	elm make src/* --output=$project_root/static/elm/elm.js --optimize
+	build_then_uglify $js $min src/*
 }
 
 build_example2() {
@@ -176,8 +192,9 @@ build_example2() {
 
 	for elm_file in src/*.elm; do
 		base_name=$(basename "$elm_file" .elm)
-		js_out_path="${project_root}/static/elm/${base_name}.js"
-		elm make "$elm_file" --output="$js_out_path" --optimize
+		js="${project_root}/static/elm/${base_name}.unmin.js"
+		min="${project_root}/static/elm/${base_name}.js"
+		build_then_uglify $js $min $elm_file
 	done
 }
 
@@ -191,11 +208,13 @@ fi
 
 ### Example 1. Using one `elm.js` file containing multiple modules
 
+File: `one-elm-js/+page.svelte`:
+
 ```svelte
 <script lang="ts">
   import Elm from "$lib/elm/Elm.svelte";
 
-  const elmJsFilename = "elm";
+  const elmJsFilename = "elm.js";
   const moduleNames = ["Counter", "TextField"] as const;
 </script>
 
@@ -217,13 +236,15 @@ fi
 
 ```
 
-### Example 2. Using multiple `_moduleName_.js` files containing a module as same name as filename.
+### Example 2. Using multiple `moduleName.js` files each containing one
+
+File: `js-per-module/+page.svelte`:
 
 ```svelte
 <script lang="ts">
   import Elm from "$lib/elm/Elm.svelte";
 
-  const elmJsFilenames = ["Hello", "Bye", "Welcome"] as const;
+  const moduleNames = ["Hello", "Bye", "Welcome"] as const;
 </script>
 
 <hgroup>
@@ -233,9 +254,9 @@ fi
   </h5>
 </hgroup>
 <div>
-  {#each elmJsFilenames as elmJsFilename}
-    {#each Array(3) as _, index (`${elmJsFilename}-${index * 3}`)}
-      <Elm {elmJsFilename} />
+  {#each moduleNames as moduleName}
+    {#each Array(3) as _, index (`${moduleName}-${index * 3}`)}
+      <Elm elmJsFilename={`${moduleName}.js`} {moduleName} />
     {/each}
   {/each}
 </div>
@@ -245,7 +266,6 @@ fi
 ## See also
 
 - [joakin/elm-node: Run Elm + JS programs easily in node](https://github.com/joakin/elm-node)
-
 ## Reference
 
 - [JavaScript Interop · An Introduction to Elm](https://guide.elm-lang.org/interop/)

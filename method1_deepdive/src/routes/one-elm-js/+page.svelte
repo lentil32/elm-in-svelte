@@ -1,7 +1,7 @@
 <script lang="ts">
   import Elm from "$lib/elm/Elm.svelte";
 
-  const elmJsFilename = "elm";
+  const elmJsFilename = "elm.js";
   const moduleNames = ["Counter", "TextField"] as const;
 </script>
 

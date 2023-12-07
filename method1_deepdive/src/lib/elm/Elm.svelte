@@ -42,11 +42,11 @@
   import { onMount } from "svelte";
   import { assets } from "$app/paths";
 
-  export let elmJsFilename: string;
-  export let moduleName: string = elmJsFilename;
+  export let elmJsFilename: `${string}.js`;
+  export let moduleName: string;
 
   const elmAssetsDirectory: string = `${assets}/elm`;
-  const elmJsPath: string = `${elmAssetsDirectory}/${elmJsFilename}.js`;
+  const elmJsFilePath: string = `${elmAssetsDirectory}/${elmJsFilename}`;
 
   let elmRoot: Node;
   const handleLoad: Callback = () => {
@@ -58,7 +58,7 @@
   };
 
   onMount(() => {
-    loadScript(elmJsPath, handleLoad);
+    loadScript(elmJsFilePath, handleLoad);
   });
 </script>
 
