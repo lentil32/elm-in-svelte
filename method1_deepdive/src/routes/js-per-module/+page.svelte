@@ -1,7 +1,7 @@
 <script lang="ts">
   import Elm from "$lib/elm/Elm.svelte";
 
-  const elmJsFilenames = ["Hello", "Bye", "Welcome"] as const;
+  const moduleNames = ["Hello", "Bye", "Welcome"] as const;
 </script>
 
 <hgroup>
@@ -11,9 +11,9 @@
   </h5>
 </hgroup>
 <div>
-  {#each elmJsFilenames as elmJsFilename}
-    {#each Array(3) as _, index (`${elmJsFilename}-${index * 3}`)}
-      <Elm {elmJsFilename} />
+  {#each moduleNames as moduleName}
+    {#each Array(3) as _, index (`${moduleName}-${index * 3}`)}
+      <Elm elmJsFilename={`${moduleName}.min.js`} {moduleName} />
     {/each}
   {/each}
 </div>
