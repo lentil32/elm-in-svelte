@@ -32,7 +32,6 @@ npm i -D @types/elm
   <script src="/elm/sample.js"></script>
 </svelte:head>
 <div bind:this="{elmRoot}" />
-
 ```
 
 ## Method 2. Using [vite-plugin-elm](https://github.com/hmsk/vite-plugin-elm):
@@ -57,7 +56,6 @@ import { plugin as elm } from "vite-plugin-elm";
 export default defineConfig({
   plugins: [sveltekit(), elm()],
 });
-
 ```
 
 4. Modify `+page.svelte` to embed `Main.elm`:
@@ -76,7 +74,6 @@ export default defineConfig({
 </script>
 
 <div bind:this="{elmRoot}" />
-
 ```
 
 ## Method 1 deep-dive. Embedding multiple Elm modules with script lifecycle management
@@ -155,10 +152,10 @@ File `Elm.svelte`:
 </script>
 
 <div bind:this={elmRoot} />
-
 ```
 
 ### Build and [minify](https://guide.elm-lang.org/optimization/asset_size) `.elm` files
+
 File `elm-build.sh`:
 
 ```sh
@@ -203,7 +200,6 @@ if [ "$1" = "1" ]; then
 elif [ "$1" = "2" ]; then
 	build_example2
 fi
-
 ```
 
 ### Example 1. Using one `elm.js` file containing multiple modules
@@ -233,7 +229,6 @@ File: `one-elm-js/+page.svelte`:
     {/each}
   {/each}
 </section>
-
 ```
 
 ### Example 2. Using multiple `moduleName.js` files each containing one
@@ -260,12 +255,12 @@ File: `js-per-module/+page.svelte`:
     {/each}
   {/each}
 </div>
-
 ```
 
 ## See also
 
 - [joakin/elm-node: Run Elm + JS programs easily in node](https://github.com/joakin/elm-node)
+
 ## Reference
 
 - [JavaScript Interop · An Introduction to Elm](https://guide.elm-lang.org/interop/)
