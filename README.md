@@ -1,6 +1,6 @@
-## How to Embed Elm into Svelte with TypeScript Setup
+# How to Embed Elm into Svelte with TypeScript Setup
 
-### Method 1. Using `<script>` tag:
+## Method 1. Using `<script>` tag:
 
 1. Install `@types/elm`:
 
