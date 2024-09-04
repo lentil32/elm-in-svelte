@@ -1,4 +1,5 @@
 # How to Embed Elm into Svelte with TypeScript Setup
+[Demo](https://lentil32.github.io/elm-in-svelte/)
 
 ## Method 1. Using `<script>` tag:
 
